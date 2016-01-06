@@ -15,15 +15,13 @@
 	<script type="text/babel">
 		var data = [
 			{ asset: "Slimes", current: 0, max: 200, multiplier: null, increment: 1 },
-			{ asset: "Carbon", current: 0, max: 500, multiplier: 1, increment: 1 },
+			{ asset: "Carbon", current: 100, max: 500, multiplier: 1, increment: 1 },
 			{ asset: "Cash", current: 0, max: null, multiplier: 1, increment: null }
 		];
 
 		var GameScreen = React.createClass({
 			redeemCarbon: function() {
-				console.log("carbon redeemed!");
-				var data = this.data;
-
+				var data = this.state.data;
 				data[2].current += (Math.floor(data[1].current * .2));
 				data[1].current = 0;
 
@@ -103,17 +101,14 @@
 
 		var ButtonRow = React.createClass({
 			handleRefine: function() {
-				this.refineStyle={ transform: "translateY(-10px)" }
+				var button = this;
+				button.refineStyle={ transform: "translateY(-10px)" }
 				setTimeout ((function(){
-					this.refineStyle={ transform: "translateY(0px)"}
-				}), 50);
+					button.refineStyle={ transform: "translateY(0px)"};
+				}), 20);
 				this.props.onRefine();
 			},
 			handleRedeem: function() {
-				this.redeemStyle={ transform: "translateY(-10px)" }
-				setTimeout ((function(){
-					this.redeemStyle={ transform: "translateY(0px)"}
-				}), 50);
 				this.props.onRedeem();
 			},
 			render: function() {
