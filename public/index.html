@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Slime Refiner!</title>
+	<link rel="stylesheet" type="text/css" href="index.css">
+
+	<script type="text/javascript" src="libs/jquery.js"></script>
+	<script type="text/javascript" src="libs/react-with-addons.js"></script>
+	<script type="text/javascript" src="libs/react-dom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+</head>
+<body>
+	<div id="game-container"></div>
+
+	<script type="text/babel">
+		var data = [
+			{ asset: "Slimes", current: 0, max: 200, multiplier: null, increment: 1 },
+			{ asset: "Carbon", current: 0, max: 500, multiplier: 1, increment: 1 },
+			{ asset: "Cash", current: 0, max: null, multiplier: 1, increment: null }
+		];
+
+		var GameScreen = React.createClass({
+			redeemCarbon: function() {
+				console.log("carbon redeemed!");
+				var data = this.data;
+
+				data[2].current += (Math.floor(data[1].current * .2));
+				data[1].current = 0;
+
+				this.setState({data: data});
+			},
+			refineSlimes: function() {
+				var data= this.state.data;
+				if (data[0].current >= data[1].increment && data[1].current < data[1].max ) {
+					data[0].current-= data[1].increment;
+					data[1].current += data[1].increment * (Math.ceil(Math.random() * (data[1].multiplier + 2)));
+				}
+				this.setState({ data: data });
+			},
+			incrementSlimes: function() {
+				var data = this.state.data;
+				if ( data[0].current < data[0].max) {
+					data[0].current += (1 * data[0].increment);
+				}
+				this.setState({ data: data});
+			},
+			getInitialState: function(){
+				return ({data: data})
+			},
+			componentDidMount: function() {
+				setInterval( this.incrementSlimes, 1000);
+			},	
+			render: function() {
+				return (
+					<div className="gameBox">
+						<h1>Your Slime Factory</h1>
+						<HeadsUpDisplay data={this.state.data}/>
+						<ButtonRow onRefine={this.refineSlimes} onRedeem={this.redeemCarbon}/>
+					</div>
+				);
+			}
+		});
+
+		var HeadsUpDisplay = React.createClass({
+			render: function(){
+				var assetNodes = this.props.data.map( function(asset) {
+					return (
+						<AssetMeter 
+							asset={asset.asset}
+							current={asset.current}
+							max={asset.max} />
+					);
+				});
+				return (
+					<div className="HUD">
+						<h3>Assets</h3>
+						{assetNodes}
+					</div>
+				);
+
+			}
+		});
+
+		var AssetMeter = React.createClass({
+			render: function() {
+				if ( this.props.max ) {
+					return (
+						<div className="assetMeter">
+							<strong>{this.props.asset}: </strong>
+							{this.props.current} / {this.props.max}
+						</div>
+					);
+				} else {
+					return (
+						<div className="assetMeter">
+							<strong>{this.props.asset}: </strong>
+							{this.props.current}
+						</div>
+					);
+				}
+			}
+		});
+
+		var ButtonRow = React.createClass({
+			handleRefine: function() {
+				this.refineStyle={ transform: "translateY(-10px)" }
+				setTimeout ((function(){
+					this.refineStyle={ transform: "translateY(0px)"}
+				}), 50);
+				this.props.onRefine();
+			},
+			handleRedeem: function() {
+				this.redeemStyle={ transform: "translateY(-10px)" }
+				setTimeout ((function(){
+					this.redeemStyle={ transform: "translateY(0px)"}
+				}), 50);
+				this.props.onRedeem();
+			},
+			render: function() {
+				return (
+					<div className="buttonRow">
+						< div className="actionButton" 
+							onClick={this.handleRefine}
+							style={this.refineStyle} >
+							<img src="assets/refinebutton.png" />
+						</div>
+						< div className="actionButton" 
+							onClick={this.handleRedeem}
+							style={this.redeemStyle}>
+							<img src="assets/redeembutton.png" />
+						</div>
+					</div>
+				);
+			}
+		});
+
+
+
+
+
+		ReactDOM.render(
+			<GameScreen />, 
+			document.getElementById('game-container')
+		);
+	</script>
+
+</body>
+</html>

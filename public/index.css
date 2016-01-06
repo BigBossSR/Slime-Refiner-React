@@ -1,0 +1,45 @@
+body {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+
+	font-family: Arial;
+}
+
+.gameBox {
+	width: 75%;
+	margin: 5vh auto;
+	height: 90vh;
+
+	border: solid gray 4px;
+	border-radius: 10px;
+	background-color: lightgrey;
+
+	color: white;
+}
+
+.gameBox>h1 {
+	text-align: center;
+}
+
+.HUD {
+	width: 90%;
+	margin: 0 auto;
+	background-color: gray;
+
+	text-align: center;
+}
+
+.assetMeter {
+	display: inline-block;
+	margin-right: 5%;
+}
+
+.buttonRow {
+	text-align: center;
+}
+
+.actionButton {
+	display: inline-block;
+	margin: 2% 5%;
+}
