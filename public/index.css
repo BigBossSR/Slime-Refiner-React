@@ -7,12 +7,12 @@ body {
 }
 
 .gameBox {
-	width: 75%;
-	margin: 5vh auto;
-	height: 90vh;
+	width: 79%;
+	height: 100vh;
+	display: inline-block;
+	vertical-align: top;
 
 	border: solid gray 4px;
-	border-radius: 10px;
 	background-color: lightgrey;
 
 	color: white;
@@ -20,12 +20,14 @@ body {
 
 .gameBox>h1 {
 	text-align: center;
+	color: #3a3a3a;
 }
 
 .HUD {
-	width: 90%;
+	width: 100%;
 	margin: 0 auto;
-	background-color: gray;
+	padding-bottom: 5px;
+	background-color: #5F5858;
 
 	text-align: center;
 }
@@ -42,4 +44,22 @@ body {
 .actionButton {
 	display: inline-block;
 	margin: 2% 5%;
+}
+
+.upgradeStore {
+	display: inline-block;
+	height: 100vh;
+	width: 20%;
+
+	background: darkgrey;
+	overflow-y; scroll;
+}
+
+.upgrade {
+	width: 100%;
+	background: lightgray;
+	color: #3a3a3a;
+	border: ridge 3px gray;
+
+	font-size: .9em;
 }

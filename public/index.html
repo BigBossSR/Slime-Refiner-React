@@ -8,11 +8,19 @@
 	<script type="text/javascript" src="libs/react-with-addons.js"></script>
 	<script type="text/javascript" src="libs/react-dom.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+	<script src="upgrades.js"></script>
 </head>
 <body>
-	<div id="game-container"></div>
+	
 
 	<script type="text/babel">
+		var factoryStats = {
+			queens: 1,
+			resource_multiplier: 1,
+			refine_batch: 1
+		};
+
 		var data = [
 			{ asset: "Slimes", current: 0, max: 200, multiplier: null, increment: 1 },
 			{ asset: "Carbon", current: 100, max: 500, multiplier: 1, increment: 1 },
@@ -50,10 +58,13 @@
 			},	
 			render: function() {
 				return (
-					<div className="gameBox">
-						<h1>Your Slime Factory</h1>
-						<HeadsUpDisplay data={this.state.data}/>
-						<ButtonRow onRefine={this.refineSlimes} onRedeem={this.redeemCarbon}/>
+					<div className="gameContainer">
+						<UpgradeStore/>
+						<div className="gameBox">
+							<h1>Your Slime Factory</h1>
+							<HeadsUpDisplay data={this.state.data}/>
+							<ButtonRow onRefine={this.refineSlimes} onRedeem={this.redeemCarbon}/>
+						</div>
 					</div>
 				);
 			}
@@ -129,14 +140,49 @@
 			}
 		});
 
+		var UpgradeStore = React.createClass({
+			getInitialState: function() {
+				return {
+					upgrades: []
+				};
+			},
+			componentWillMount: function() {
+				this.setState({upgrades: upgradeList})
+			},	
+					render: function(){
+				return (
+					<div className="upgradeStore">
+					{this.state.upgrades.map( function(upgrade) {
+						return (
+							<Upgrade title={upgrade.name} cost={upgrade.cost} description={upgrade.description} max={upgrade.max}/>
+						)
+					})}
 
+					</div>
+				);
+			}
+		})
+
+		var Upgrade = React.createClass({
+			render: function() {
+				return (
+					<div className="upgrade" onClick={this.benefit}>
+						<div className="upgradeTitle"><strong>{this.props.title} </strong></div>
+						<span className="upgradeCost">Cost: {this.props.cost} </span>
+						<span>Max: {this.props.max} </span>
+						<p className="upgradeDescription">{this.props.description} </p>
+					</div>
+				);
+			}
+		})
 
 
 
 		ReactDOM.render(
-			<GameScreen />, 
-			document.getElementById('game-container')
+			<GameScreen />,
+			document.getElementsByTagName("body")[0]
 		);
+
 	</script>
 
 </body>
